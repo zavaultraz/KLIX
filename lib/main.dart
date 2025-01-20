@@ -1,7 +1,9 @@
+import 'package:filmku/Cubit/creditmovie_cubit.dart';
 import 'package:filmku/Cubit/detailmovie_cubit.dart';
 import 'package:filmku/Cubit/nowmovie_cubit.dart';
 import 'package:filmku/Cubit/soonmovie_cubit.dart';
 import 'package:filmku/Cubit/topmovie_cubit.dart';
+import 'package:filmku/Service/credits_service.dart';
 import 'package:filmku/Service/details_service.dart';
 import 'package:filmku/Service/service.dart';
 import 'package:filmku/Cubit/movie_cubit.dart';
@@ -33,6 +35,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider(
           create: (context) => DetailMovieCubit(DetailsService()),
+        ),
+        BlocProvider(
+          create: (context) => CreditsMovieCubit(CreditsService()),
         ),
       ],
       child: MaterialApp(
