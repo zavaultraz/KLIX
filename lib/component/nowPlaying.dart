@@ -1,4 +1,5 @@
 import 'package:filmku/Cubit/nowmovie_cubit.dart';
+import 'package:filmku/detailsScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -32,61 +33,73 @@ class NowPlayingCarousel extends StatelessWidget {
             items: movies.map((movie) {
               return Builder(
                 builder: (BuildContext context) {
-                  return Container(
-                    width: MediaQuery.of(context).size.width, // Lebar penuh layar
-                    child: Stack(
-                      fit: StackFit.expand, // Menjaga agar gambar memenuhi container
-                      children: [
-                        // Gambar sebagai latar belakang
-                        ClipRRect(
-                          borderRadius: BorderRadius.only(bottomRight: Radius.circular(20),bottomLeft: Radius.circular(20)),
-                          child: Image.network(
-                            'https://image.tmdb.org/t/p/w500/${movie.image}',
-                            fit: BoxFit.cover, // Gambar menutupi seluruh container
-                          ),
+                  return GestureDetector(
+                    onTap: () {
+                      // Navigasi ke Detail Movie Screen dan mengirimkan ID film
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              DetailMovieScreen(movieId: movie.id!.toInt()),
+                        ),
+                      );
+                    },
+                    child: Container(
+                      width: MediaQuery.of(context).size.width, // Lebar penuh layar
+                      child: Stack(
+                        fit: StackFit.expand, // Menjaga agar gambar memenuhi container
+                        children: [
+                          // Gambar sebagai latar belakang
+                          ClipRRect(
+                            borderRadius: BorderRadius.only(bottomRight: Radius.circular(20),bottomLeft: Radius.circular(20)),
+                            child: Image.network(
+                              'https://image.tmdb.org/t/p/w500/${movie.image}',
+                              fit: BoxFit.cover, // Gambar menutupi seluruh container
+                            ),
 
-                        ),
-                        // Teks judul dan deskripsi di atas gambar
-                        Positioned(
-                          bottom: 20,
-                          left: 10,
-                          right: 10,
-                          child: Container(
-                            padding: EdgeInsets.all(8),
-                            decoration: BoxDecoration(
-                              color: Colors.black.withOpacity(0.5), // Transparansi
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                // Teks Judul
-                                Text(
-                                  movie.title ?? 'No Title',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 18,
-                                    color: Colors.white,
+                          ),
+                          // Teks judul dan deskripsi di atas gambar
+                          Positioned(
+                            bottom: 20,
+                            left: 10,
+                            right: 10,
+                            child: Container(
+                              padding: EdgeInsets.all(8),
+                              decoration: BoxDecoration(
+                                color: Colors.black.withOpacity(0.5), // Transparansi
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  // Teks Judul
+                                  Text(
+                                    movie.title ?? 'No Title',
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 18,
+                                      color: Colors.white,
+                                    ),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
                                   ),
-                                  maxLines: 1,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                                SizedBox(height: 4),
-                                // Deskripsi film (Overview)
-                                Text(
-                                  movie.overview ?? 'No Description',
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    color: Colors.white,
+                                  SizedBox(height: 4),
+                                  // Deskripsi film (Overview)
+                                  Text(
+                                    movie.overview ?? 'No Description',
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      color: Colors.white,
+                                    ),
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
                                   ),
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   );
                 },

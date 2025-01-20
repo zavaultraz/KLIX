@@ -3,9 +3,11 @@ import 'package:filmku/Cubit/topmovie_cubit.dart';
 import 'package:filmku/Model/movie.dart';
 import 'package:filmku/component/cardPopular.dart';
 import 'package:filmku/component/nowPlaying.dart';
+import 'package:filmku/detailsScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:filmku/Cubit/movie_cubit.dart'; // Import MovieCubit
+import 'package:filmku/Cubit/movie_cubit.dart';
+import 'package:google_fonts/google_fonts.dart'; // Import MovieCubit
 
 class Homescreen extends StatelessWidget {
   @override
@@ -18,17 +20,6 @@ class Homescreen extends StatelessWidget {
     });
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Filmku'),
-        leading: Icon(Icons.menu),
-        centerTitle: true,
-        actions: [
-          Icon(Icons.search_rounded),
-          SizedBox(width: 10),
-          Icon(Icons.notifications),
-          SizedBox(width: 10)
-        ],
-      ),
       body: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: Column(
@@ -44,7 +35,7 @@ class Homescreen extends StatelessWidget {
                 children: [
                   Text(
                     'Popular Movies',
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                    style:  GoogleFonts.lexendDeca(fontWeight: FontWeight.bold, fontSize: 24),
                   ),
                 ],
               ),
@@ -80,75 +71,87 @@ class Homescreen extends StatelessWidget {
                                 ),
                               ],
                             ),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(
-                                  16), // Rounded corners for the whole container
-                              child: Stack(
-                                children: [
-                                  // Image with shadow effect
-                                  Positioned.fill(
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(16),
-                                      child: Image.network(
-                                        'https://image.tmdb.org/t/p/w500/${movie.poster}', // Full image URL
-                                        fit: BoxFit.cover,
-                                      ),
-                                    ),
+                            child: GestureDetector(
+                              onTap: () {
+                                // Navigasi ke Detail Movie Screen dan mengirimkan ID film
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        DetailMovieScreen(movieId: movie.id!.toInt()),
                                   ),
-                                  // Gradient overlay for readability
-                                  Positioned.fill(
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        gradient: LinearGradient(
-                                          begin: Alignment.topCenter,
-                                          end: Alignment.bottomCenter,
-                                          colors: [
-                                            Colors.transparent,
-                                            Colors.black.withOpacity(
-                                                0.5), // Dark overlay for text contrast
-                                          ],
+                                );
+                              },
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(
+                                    16), // Rounded corners for the whole container
+                                child: Stack(
+                                  children: [
+                                    // Image with shadow effect
+                                    Positioned.fill(
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(16),
+                                        child: Image.network(
+                                          'https://image.tmdb.org/t/p/w500/${movie.poster}', // Full image URL
+                                          fit: BoxFit.cover,
                                         ),
                                       ),
                                     ),
-                                  ),
-                                  // Title and movie info overlay
-                                  Positioned(
-                                    bottom: 20,
-                                    left: 10,
-                                    right: 10,
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        // Movie Title
-                                        Text(
-                                          movie.title ?? 'No Title',
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 16,
-                                            color: Colors.white,
+                                    // Gradient overlay for readability
+                                    Positioned.fill(
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          gradient: LinearGradient(
+                                            begin: Alignment.topCenter,
+                                            end: Alignment.bottomCenter,
+                                            colors: [
+                                              Colors.transparent,
+                                              Colors.black.withOpacity(
+                                                  0.5), // Dark overlay for text contrast
+                                            ],
                                           ),
                                         ),
-                                        SizedBox(height: 5),
-                                        // Movie Description (shortened if needed)
-                                        Text(
-                                          movie.overview ??
-                                              'No Description Available',
-                                          maxLines: 2,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: TextStyle(
-                                            fontSize: 12,
-                                            fontWeight: FontWeight.w500,
-                                            color:
-                                                Colors.white.withOpacity(0.8),
-                                          ),
-                                        ),
-                                      ],
+                                      ),
                                     ),
-                                  ),
-                                ],
+                                    // Title and movie info overlay
+                                    Positioned(
+                                      bottom: 20,
+                                      left: 10,
+                                      right: 10,
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          // Movie Title
+                                          Text(
+                                            movie.title ?? 'No Title',
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 16,
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                          SizedBox(height: 5),
+                                          // Movie Description (shortened if needed)
+                                          Text(
+                                            movie.overview ??
+                                                'No Description Available',
+                                            maxLines: 2,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: TextStyle(
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.w500,
+                                              color:
+                                                  Colors.white.withOpacity(0.8),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                           );
@@ -170,7 +173,7 @@ class Homescreen extends StatelessWidget {
                 children: [
                   Text(
                     'Coming Soon',
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                    style: GoogleFonts.lexendDeca(fontWeight: FontWeight.bold, fontSize: 24),
                   ),
                 ],
               ),
@@ -199,33 +202,45 @@ class Homescreen extends StatelessWidget {
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(12), // Sudut melengkung
                                   ),
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.center, // Memusatkan konten
-                                    children: [
-                                      // Gambar film
-                                      ClipRRect(
-                                        borderRadius: BorderRadius.circular(12), // Sudut melengkung pada gambar
-                                        child: Image.network(
-                                          'https://image.tmdb.org/t/p/w500/${movie.poster}', // URL gambar film
-                                          width: 160,  // Lebar gambar
-                                          height: 220, // Tinggi gambar
-                                          fit: BoxFit.cover, // Agar gambar memenuhi kontainer
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      // Navigasi ke Detail Movie Screen dan mengirimkan ID film
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              DetailMovieScreen(movieId: movie.id!.toInt()),
                                         ),
-                                      ),
-                                      SizedBox(height: 8), // Jarak antara gambar dan judul
-                                      // Judul film
-                                      Text(
-                                        movie.title ?? 'No Title', // Menampilkan judul film
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 18, // Ukuran font
-                                          color: Colors.black, // Warna teks
+                                      );
+                                    },
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.center, // Memusatkan konten
+                                      children: [
+                                        // Gambar film
+                                        ClipRRect(
+                                          borderRadius: BorderRadius.circular(12), // Sudut melengkung pada gambar
+                                          child: Image.network(
+                                            'https://image.tmdb.org/t/p/w500/${movie.poster}', // URL gambar film
+                                            width: 160,  // Lebar gambar
+                                            height: 220, // Tinggi gambar
+                                            fit: BoxFit.cover, // Agar gambar memenuhi kontainer
+                                          ),
                                         ),
-                                        textAlign: TextAlign.center, // Memusatkan teks
-                                        overflow: TextOverflow.ellipsis, // Jika terlalu panjang, dipotong
-                                        maxLines: 2, // Maksimal dua baris
-                                      ),
-                                    ],
+                                        SizedBox(height: 8), // Jarak antara gambar dan judul
+                                        // Judul film
+                                        Text(
+                                          movie.title ?? 'No Title', // Menampilkan judul film
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 18, // Ukuran font
+                                            color: Colors.black, // Warna teks
+                                          ),
+                                          textAlign: TextAlign.center, // Memusatkan teks
+                                          overflow: TextOverflow.ellipsis, // Jika terlalu panjang, dipotong
+                                          maxLines: 2, // Maksimal dua baris
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 );
 
@@ -243,8 +258,9 @@ class Homescreen extends StatelessWidget {
                 }
               },
             ),
+            SizedBox(height: 8,),
             Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
               child: Column(
                 children: [
                   Row(
@@ -252,144 +268,126 @@ class Homescreen extends StatelessWidget {
                     children: [
                       Text(
                         'Top Movies',
-                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                        style:  GoogleFonts.lexendDeca(fontWeight: FontWeight.bold, fontSize: 24),
                       ),
                     ],
                   ),
                 ],
               ),
             ),
-            BlocBuilder<TopmovieCubit, TopmovieState>(
-              builder: (context, state) {
-                if (state is TopmovieInitial) {
-                  return Center(
-                      child: CircularProgressIndicator()); // Loading state
-                } else if (state is TopmovieLoaded) {
-                  final movies = state.movies;
-                  return Column(
-                    children: [
-                      // Daftar film terbatas (5 item pertama)
-                      _buildLeaderboardItem(1, movies[0]),
-                      _buildLeaderboardItem(2, movies[1]),
-                      _buildLeaderboardItem(3, movies[2]),
-                    ],
-                  );
+        SizedBox(height: 15,),
+        BlocBuilder<TopmovieCubit, TopmovieState>(
+          builder: (context, state) {
+            if (state is TopmovieInitial) {
+              return Center(child: CircularProgressIndicator()); // Loading state
+            } else if (state is TopmovieLoaded) {
+              final movies = state.movies; // List<Movie> here
 
-                } else if (state is TopmovieError) {
-                  return Center(
-                      child: Text('Error: ${state.message}')); // Error state
-                } else {
-                  return Center(child: Text('No data available.'));
-                }
-              },
-            ),
-          ],
-        ),
-      ),
-    );
+              return SingleChildScrollView(
+                scrollDirection: Axis.horizontal, // Horizontal scroll
+                child: Row(
+                  children: List.generate(
+                    movies.length, // Menampilkan daftar film
+                        (index) {
+                      final movie = movies[index];
 
-  }
-  Widget _buildLeaderboardItem(int rank, Movie movie) {
-    return Center(
-      child: Container(
-        margin: EdgeInsets.symmetric(vertical: 8),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(30), // Membuat bentuk kapsul
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.1),
-              blurRadius: 4,
-              offset: Offset(0, 2),
-            ),
-          ],
-        ),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12), // Padding lebih kecil
-          child: Row(
-            children: [
-              // Left side: Image with rank
-              ClipRRect(
-                borderRadius: BorderRadius.only(
-                  bottomRight: Radius.circular(20),
-                  topRight: Radius.circular(20),
-                ), // Bentuk kapsul
-                child: Image.network(
-                  'https://image.tmdb.org/t/p/w500/${movie.image}',
-                  width: 150,  // Ukuran gambar
-                  height: 100, // Ukuran gambar
-                  fit: BoxFit.cover,
-                ),
-              ),
-              SizedBox(width: 12),
-              // Right side: Movie title, rating, genre, release date
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Peringkat dan judul film di baris yang sama
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        // Column untuk judul dan rating
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              // Movie title, bisa dua baris
-                              Text(
-                                movie.title ?? 'No Title',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 18,
-                                  color: Colors.black87,
-                                ),
-                                maxLines: 2, // Maksimal dua baris untuk judul
-                                overflow: TextOverflow.ellipsis, // Jika panjang, akan dipotong
+                      return Container(
+                        margin: EdgeInsets.symmetric(horizontal: 8), // Jarak antar elemen
+                        width: 380, // Lebar kontainer per item
+                        height: 210, // Tinggi kontainer
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(12), // Sudut melengkung
+                        ),
+                        child: GestureDetector(
+                          onTap: () {
+                            // Navigasi ke Detail Movie Screen dan mengirimkan ID film
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => DetailMovieScreen(movieId: movie.id!.toInt()),
                               ),
-                              SizedBox(height: 4),
-                              // Rating
+                            );
+                          },
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center, // Memusatkan konten
+                            children: [
+                              // Gambar film
                               Row(
                                 children: [
-                                  Icon(
-                                    Icons.star,
-                                    color: Colors.yellow,
-                                    size: 16,
+                                  ClipRRect(
+                                    borderRadius: BorderRadius.circular(12), // Sudut melengkung pada gambar
+                                    child: Image.network(
+                                      'https://image.tmdb.org/t/p/w500/${movie.image}', // URL gambar film
+                                      width: 260,  // Lebar gambar
+                                      height: 150, // Tinggi gambar
+                                      fit: BoxFit.cover, // Agar gambar memenuhi kontainer
+                                    ),
                                   ),
-                                  SizedBox(width: 4),
+                                  SizedBox(width: 10,),
                                   Text(
-                                    movie.rating?.toStringAsFixed(1) ?? '0.0',
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w600,
-                                      color: Colors.black87,
+                                    '${index + 1}', // Menampilkan angka urut (dimulai dari 1)
+                                    style: GoogleFonts.orbitron(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 60,
+                                      color: Colors.black, // Warna teks
                                     ),
                                   ),
                                 ],
                               ),
+                              SizedBox(height: 8), // Jarak antara gambar dan judul
+                              // Judul film
+                              Text(
+                                movie.title ?? 'No Title', // Menampilkan judul film
+                                style: GoogleFonts.poppins(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 18, // Ukuran font
+                                  color: Colors.black, // Warna teks
+                                ),
+                                textAlign: TextAlign.center, // Memusatkan teks
+                                overflow: TextOverflow.ellipsis, // Jika terlalu panjang, dipotong
+                                maxLines: 2, // Maksimal dua baris
+                              ),
                             ],
                           ),
                         ),
-                        // Rank di sebelah kanan
-                        Text(
-                          '$rank', // Menampilkan peringkat
-                          style: TextStyle(
-                            fontSize: 30, // Ukuran font untuk peringkat
-                            fontWeight: FontWeight.bold,
-                            color: Colors.grey,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
+                      );
+                    },
+                  ),
                 ),
-              ),
-            ],
-          ),
+              );
+            } else if (state is TopmovieError) {
+              return Center(child: Text('Error: ${state.message}')); // Error state
+            } else {
+              return Center(child: Text('No data available.'));
+            }
+          },
         ),
-      ),
-    );
-  }
+        ],
+        ),
 
+      ),
+        bottomNavigationBar: BottomNavigationBar(
+
+          selectedItemColor: Colors.yellow, // Warna item yang aktif
+          unselectedItemColor: Colors.grey, // Warna item yang tidak aktif
+          items: const <BottomNavigationBarItem>[
+            BottomNavigationBarItem(
+              icon: Icon(Icons.home,size: 40,),
+              label: '', // Menghapus label
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.movie,size: 40),
+              label: '', // Menghapus label
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.account_circle, size: 40),
+              label: '', // Menghapus label
+            ),
+          ],
+        )
+
+    );
+
+  }
 
 }
