@@ -1,26 +1,25 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:filmku/Model/credits.dart';
-import 'package:filmku/Service/credits_service.dart';
+import 'package:filmku/Service/credits_service.dart'; // pastikan import service yang benar
 import 'package:meta/meta.dart';
 
 part 'creditmovie_state.dart';
 
-class CreditsMovieCubit extends Cubit<CreditsState> {
-  final CreditsService credService;
+class CreditsCubit extends Cubit<CreditsState> {
+  final CreditsService _creditsService;
 
-  CreditsMovieCubit(this.credService) : super(CreditsInitial());
+  CreditsCubit(this._creditsService) : super(CreditsInitial());
 
-  // Method untuk mengambil detail film berdasarkan movieId
-  // Fetch movie credits based on movieId
+  // Method untuk mengambil data credits berdasarkan movieId
   Future<void> fetchCredits(int movieId) async {
-    emit(CreditsLoading()); // Set loading state
-
+    emit(CreditsLoading()); // Mengubah state menjadi loading
     try {
-      final credits = await credService.fetchMovieCredit(movieId);
-      emit(CreditsLoaded(credits)); // Successfully loaded credits
+      // Memanggil service untuk mendapatkan daftar cast (credits)
+      final List<Credits> creditsList = await _creditsService.fetchMovieCredit(movieId);
+      emit(CreditsLoaded(creditsList)); // Jika berhasil, update state menjadi CreditsLoaded
     } catch (e) {
-      emit(CreditsError('Failed to load credits: $e')); // Error state
+      emit(CreditsError(e.toString())); // Jika terjadi error, update state menjadi CreditsError
     }
   }
 }

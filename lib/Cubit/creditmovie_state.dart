@@ -19,7 +19,7 @@ final class CreditsLoading extends CreditsState {}
 
 // CreditsLoaded: ketika data credits berhasil dimuat
 final class CreditsLoaded extends CreditsState {
-  final Credits credits;
+  final List<Credits> credits; // Mengubah menjadi List<Credits>
 
   CreditsLoaded(this.credits);
 
